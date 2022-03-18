@@ -17,7 +17,7 @@ if($config.Debug_Log) {
 	Start-Logging "$PSScriptRoot\log\debug.log"
 }
 
-#Add-PSSnapin VeeamPSSnapin
+#Add-PSSnapin Veeam.Backup.PowerShell
 Import-Module Veeam.Backup.PowerShell
 
 # Get the session
