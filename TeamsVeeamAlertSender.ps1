@@ -175,13 +175,8 @@ $CompressRatio = [math]::Round($CompressRatio,2)
 $DedupRatio = 100 / $session.BackupStats.DedupRatio
 $DedupRatio = [math]::Round($DedupRatio,2)
 
-# Parenthèse
-$Parenthese = ' ('
-$Parenthese2 = '%)'
-
 # Completion pourcentage
 $CompletePourcent = ' ({0}%)' -f  $session.Info.CompletionPercentage
-
 
 # Switch for card theme colour
 Switch ([String]$Status) {
