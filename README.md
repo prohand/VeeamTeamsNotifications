@@ -6,9 +6,6 @@ Sends notifications from Veeam Backup & Restore to Teams
 [Better example.](https://raw.githubusercontent.com/tigattack/VeeamTeamsNotifications/master/asset/img/screens/sh-4.png)
 
 ---
-## [Slack fork.](https://github.com/tigattack/VeeamSlackNotifications)
-## [MS Teams fork.](https://github.com/tigattack/VeeamTeamsNotifications)
----
 ## Teams setup
 
 Make a scripts directory: `C:\VeeamScripts`
@@ -24,7 +21,7 @@ Then clone this repository:
 
 ```shell
 cd C:\VeeamScripts
-git clone https://github.com/tigattack/VeeamTeamsNotifications.git
+git clone https://github.com/prohand/VeeamTeamsNotifications.git
 cd VeeamTeamsNotifications
 ```
 
@@ -33,7 +30,7 @@ Or without git:
 Download release, there may be later releases take a look and replace the version number with newer release numbers.
 Unzip the archive and make sure the folder is called: `VeeamTeamsNotifications`
 ```powershell
-Invoke-WebRequest -Uri https://github.com/tigattack/VeeamTeamsNotifications/archive/v1.1.zip -OutFile C:\VeeamScripts\VeeamTeamsNotifications-v1.1.zip
+Invoke-WebRequest -Uri https://github.com/prohand/VeeamTeamsNotifications/archive/v1.1.zip -OutFile C:\VeeamScripts\VeeamTeamsNotifications-v1.1.zip
 ```
 
 #### Extract and clean up
