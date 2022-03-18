@@ -4,7 +4,7 @@ Sends notifications from Veeam Backup & Restore to Teams
 
 ![Chat Example](https://raw.githubusercontent.com/prohand/VeeamTeamsNotifications/master/asset/img/screens/sh-2.png)    
 
-# Veeam Backup and Restore Notifications for Teams
+# Compatibility
 
 Tested on Veeam Backup And Replication V11
 
