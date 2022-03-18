@@ -10,7 +10,8 @@ if($config.debug_log) {
 }
 
 # Add Veeam commands
-Add-PSSnapin VeeamPSSnapin
+#Add-PSSnapin VeeamPSSnapin
+Import-Module Veeam.Backup.PowerShell
 
 # Get Veeam job from parent process
 $parentpid = (Get-WmiObject Win32_Process -Filter "processid='$pid'").parentprocessid.ToString()
