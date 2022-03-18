@@ -2,8 +2,7 @@
 
 Sends notifications from Veeam Backup & Restore to Teams
 
-![Chat Example](https://raw.githubusercontent.com/tigattack/VeeamTeamsNotifications/master/asset/img/screens/sh-2.png)    
-[Better example.](https://raw.githubusercontent.com/tigattack/VeeamTeamsNotifications/master/asset/img/screens/sh-4.png)
+![Chat Example](https://raw.githubusercontent.com/prohand/VeeamTeamsNotifications/master/asset/img/screens/sh-4.png)    
 
 ---
 ## Teams setup
