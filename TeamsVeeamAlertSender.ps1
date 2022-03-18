@@ -204,7 +204,7 @@ $Card = ConvertTo-Json -Depth 4 @{
             title = '**Veeam Backup & Replication**'
             activityImage = $StatusImg
             activityTitle = $JobName
-            activitySubtitle = (Get-Date -Format U)
+            activitySubtitle = (Get-Date)
             facts = @(
                 @{
                     name = "Job status:"
