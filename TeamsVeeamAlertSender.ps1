@@ -6,6 +6,7 @@ Param(
 ####################
 # Import Functions #
 ####################
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 Import-Module "$PSScriptRoot\Helpers"
 
 # Get the config from our config file
@@ -16,12 +17,11 @@ if($config.Debug_Log) {
 	Start-Logging "$PSScriptRoot\log\debug.log"
 }
 
-# Add Veeam commands
-Add-PSSnapin VeeamPSSnapin
+#Add-PSSnapin VeeamPSSnapin
+Import-Module Veeam.Backup.PowerShell
 
 # Get the session
 $session = Get-VBRBackupSession | ?{($_.OrigJobName -eq $JobName) -and ($Id -eq $_.Id.ToString())}
-
 # Wait for the session to finish up
 while ($session.IsCompleted -eq $false) {
 	Write-LogMessage 'Info' 'Session not finished Sleeping...'
@@ -35,6 +35,8 @@ $JobName = $session.Name.ToString().Trim()
 $JobType = $session.JobTypeString.Trim()
 [Float]$JobSize = $session.BackupStats.DataSize
 [Float]$TransfSize = $session.BackupStats.BackupSize
+[Float]$ReadSize = $session.Progress.Readsize
+[Float]$DataProcessedSize = $session.Progress.ProcessedUsedSize
 
 # Report job/data size in B, KB, MB, GB, or TB depending on completed size.
 ## Job size
@@ -97,11 +99,89 @@ Else{
     [String]$TransfSizeRound = [Float]$TransfSize
     [String]$TransfSizeRound += ' B'
 }
-
+## Read size
+If([Float]$ReadSize -lt 1KB) {
+    [String]$ReadSizeRound = [Float]$ReadSize
+    [String]$ReadSizeRound += ' B'
+}
+ElseIf([Float]$ReadSize -lt 1MB) {
+    [Float]$ReadSize = [Float]$ReadSize / 1KB
+    [String]$ReadSizeRound = [math]::Round($ReadSize,2)
+    [String]$ReadSizeRound += ' KB'
+}
+ElseIf([Float]$ReadSize -lt 1GB) {
+    [Float]$ReadSize = [Float]$ReadSize / 1MB
+    [String]$ReadSizeRound = [math]::Round($ReadSize,2)
+    [String]$ReadSizeRound += ' MB'
+}
+ElseIf([Float]$ReadSize -lt 1TB) {
+    [Float]$ReadSize = [Float]$ReadSize / 1GB
+    [String]$ReadSizeRound = [math]::Round($ReadSize,2)
+    [String]$ReadSizeRound += ' GB'
+}
+ElseIf([Float]$ReadSize -ge 1TB) {
+    [Float]$ReadSize = [Float]$ReadSize / 1TB
+    [String]$ReadSizeRound = [math]::Round($ReadSize,2)
+    [String]$ReadSizeRound += ' TB'
+}
+### If no match then report in bytes
+Else{
+    [String]$ReadSizeRound = [Float]$TransfSize
+    [String]$ReadSizeRound += ' B'
+}
+## Data Processed
+If([Float]$DataProcessedSize -lt 1KB) {
+    [String]$DataProcessedSizeRound = [Float]$DataProcessedSize
+    [String]$DataProcessedSizeRound += ' B'
+}
+ElseIf([Float]$DataProcessedSize -lt 1MB) {
+    [Float]$DataProcessedSize = [Float]$DataProcessedSize / 1KB
+    [String]$DataProcessedSizeRound = [math]::Round($DataProcessedSize,2)
+    [String]$DataProcessedSizeRound += ' KB'
+}
+ElseIf([Float]$DataProcessedSize -lt 1GB) {
+    [Float]$DataProcessedSize = [Float]$DataProcessedSize / 1MB
+    [String]$DataProcessedSizeRound = [math]::Round($DataProcessedSize,2)
+    [String]$DataProcessedSizeRound += ' MB'
+}
+ElseIf([Float]$DataProcessedSize -lt 1TB) {
+    [Float]$DataProcessedSize = [Float]$DataProcessedSize / 1GB
+    [String]$DataProcessedSizeRound = [math]::Round($DataProcessedSize,2)
+    [String]$DataProcessedSizeRound += ' GB'
+}
+ElseIf([Float]$DataProcessedSize -ge 1TB) {
+    [Float]$DataProcessedSize = [Float]$DataProcessedSize / 1TB
+    [String]$DataProcessedSizeRound = [math]::Round($DataProcessedSize,2)
+    [String]$DataProcessedSizeRound += ' TB'
+}
+### If no match then report in bytes
+Else{
+    [String]$ReadSizeRound = [Float]$TransfSize
+    [String]$ReadSizeRound += ' B'
+}
 # Job duration
 $Duration = $session.Info.EndTime - $session.Info.CreationTime
 $TimeSpan = $Duration
 $Duration = '{0:00}h {1:00}m {2:00}s' -f $TimeSpan.Hours, $TimeSpan.Minutes, $TimeSpan.Seconds
+
+# Rate
+$Rate = [Math]::Round($session.Progress.AvgSpeed/1024/1024,0)
+
+# Compress ratio
+$CompressRatio = 100 / $session.BackupStats.CompressRatio
+$CompressRatio = [math]::Round($CompressRatio,2)
+
+# Dedup ratio
+$DedupRatio = 100 / $session.BackupStats.DedupRatio
+$DedupRatio = [math]::Round($DedupRatio,2)
+
+# Parenthèse
+$Parenthese = ' ('
+$Parenthese2 = '%)'
+
+# Completion pourcentage
+$CompletePourcent = ' ({0}%)' -f  $session.Info.CompletionPercentage
+
 
 # Switch for card theme colour
 Switch ([String]$Status) {
@@ -140,16 +220,28 @@ $Card = ConvertTo-Json -Depth 4 @{
 					value = $JobSizeRound
 				},
 				@{
+					name = "Rate Processing:"
+					value = [String]$Rate += ' MB/s'
+				},
+				@{
+					name = "Read data:"
+					value = $ReadSizeRound
+				},
+				@{
 					name = "Transferred data:"
 					value = $TransfSizeRound
 				},
 				@{
+					name = "Processed data:"
+					value = $DataProcessedSizeRound += $CompletePourcent
+				},
+				@{
 					name = "Dedupe ratio:"
-					value = $session.BackupStats.DedupRatio
+					value = [String]$DedupRatio += ' %'
                 },
 				@{
 					name = "Compress ratio:"
-					value =	$session.BackupStats.CompressRatio
+					value =	[String]$CompressRatio += ' %'
                 },
 				@{
 					name = "Duration:"
