@@ -6,7 +6,7 @@ Sends notifications from Veeam Backup & Restore to Teams
 
 # Compatibility
 
-Tested on Veeam Backup And Replication V11
+Veeam Backup And Replication V11 only
 
 ---
 ## Teams setup
