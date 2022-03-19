@@ -38,9 +38,9 @@ Invoke-WebRequest -Uri https://github.com/prohand/VeeamTeamsNotifications/archiv
 
 #### Extract and clean up
 ```shell
-Expand-Archive C:\VeeamScripts\VeeamTeamsNotifications-v1.1.zip -DestinationPath C:\VeeamScripts
-Ren C:\VeeamScripts\VeeamTeamsNotifications-1.1 C:\VeeamScripts\VeeamTeamsNotifications
-rm C:\VeeamScripts\VeeamTeamsNotifications-v1.1.zip
+Expand-Archive C:\VeeamScripts\VeeamTeamsNotifications-v1.2.zip -DestinationPath C:\VeeamScripts
+Ren C:\VeeamScripts\VeeamTeamsNotifications-1.2 C:\VeeamScripts\VeeamTeamsNotifications
+rm C:\VeeamScripts\VeeamTeamsNotifications-v1.2.zip
 ```
 
 #### Configure the project:
