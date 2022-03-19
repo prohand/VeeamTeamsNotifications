@@ -33,7 +33,7 @@ Or without git:
 Download release, there may be later releases take a look and replace the version number with newer release numbers.
 Unzip the archive and make sure the folder is called: `VeeamTeamsNotifications`
 ```powershell
-Invoke-WebRequest -Uri https://github.com/prohand/VeeamTeamsNotifications/archive/v1.1.zip -OutFile C:\VeeamScripts\VeeamTeamsNotifications-v1.1.zip
+Invoke-WebRequest -Uri https://github.com/prohand/VeeamTeamsNotifications/archive/v1.2.zip -OutFile C:\VeeamScripts\VeeamTeamsNotifications-v1.2.zip
 ```
 
 #### Extract and clean up
