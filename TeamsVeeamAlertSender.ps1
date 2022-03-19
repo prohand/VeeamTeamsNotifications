@@ -165,15 +165,10 @@ $TimeSpan = $Duration
 $Duration = '{0:00}h {1:00}m {2:00}s' -f $TimeSpan.Hours, $TimeSpan.Minutes, $TimeSpan.Seconds
 
 # Rate
-if ($session.Progress.AvgSpeed > 0)
-{
-  $Rate = [math]::Round($session.Progress.AvgSpeed/1024/1024,0)
-}else{
-  $Rate = 0
-}
+$Rate = [math]::Round($session.Progress.AvgSpeed/1024/1024,0)
 
 # Compress ratio
-if ($session.BackupStats.CompressRatio > 0)
+if ($session.BackupStats.CompressRatio -gt 0)
 {
   $CompressRatio = 100 / $session.BackupStats.CompressRatio
   $CompressRatio = [math]::Round($CompressRatio,2)
@@ -182,7 +177,7 @@ if ($session.BackupStats.CompressRatio > 0)
 }
 
 # Dedup ratio
-if ($session.BackupStats.DedupRatio > 0)
+if ($session.BackupStats.DedupRatio -gt 0)
 {
   $DedupRatio = 100 / $session.BackupStats.DedupRatio
   $DedupRatio = [math]::Round($DedupRatio,2)
