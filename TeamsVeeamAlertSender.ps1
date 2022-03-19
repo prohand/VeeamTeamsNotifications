@@ -165,7 +165,6 @@ $TimeSpan = $Duration
 $Duration = '{0:00}h {1:00}m {2:00}s' -f $TimeSpan.Hours, $TimeSpan.Minutes, $TimeSpan.Seconds
 
 # Rate
-
 if ($session.Progress.AvgSpeed > 0)
 {
   $Rate = [math]::Round($session.Progress.AvgSpeed/1024/1024,0)
