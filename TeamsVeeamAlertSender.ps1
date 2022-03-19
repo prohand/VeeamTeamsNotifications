@@ -165,15 +165,31 @@ $TimeSpan = $Duration
 $Duration = '{0:00}h {1:00}m {2:00}s' -f $TimeSpan.Hours, $TimeSpan.Minutes, $TimeSpan.Seconds
 
 # Rate
-$Rate = [Math]::Round($session.Progress.AvgSpeed/1024/1024,0)
+
+if ($session.Progress.AvgSpeed > 0)
+{
+  $Rate = [math]::Round($session.Progress.AvgSpeed/1024/1024,0)
+}else{
+  $Rate = 0
+}
 
 # Compress ratio
-$CompressRatio = 100 / $session.BackupStats.CompressRatio
-$CompressRatio = [math]::Round($CompressRatio,2)
+if ($session.BackupStats.CompressRatio > 0)
+{
+  $CompressRatio = 100 / $session.BackupStats.CompressRatio
+  $CompressRatio = [math]::Round($CompressRatio,2)
+}else{
+  $CompressRatio = 0
+}
 
 # Dedup ratio
-$DedupRatio = 100 / $session.BackupStats.DedupRatio
-$DedupRatio = [math]::Round($DedupRatio,2)
+if ($session.BackupStats.DedupRatio > 0)
+{
+  $DedupRatio = 100 / $session.BackupStats.DedupRatio
+  $DedupRatio = [math]::Round($DedupRatio,2)
+}else{
+  $DedupRatio = 0
+}
 
 # Completion pourcentage
 $CompletePourcent = ' ({0}%)' -f  $session.Info.CompletionPercentage
@@ -204,7 +220,7 @@ $Card = ConvertTo-Json -Depth 4 @{
             title = '**Veeam Backup & Replication**'
             activityImage = $StatusImg
             activityTitle = $JobName
-            activitySubtitle = (Get-Date)
+            activitySubtitle = (Get-Date -UFormat “%A %d %B %Y %T”)
             facts = @(
                 @{
                     name = "Job status:"
